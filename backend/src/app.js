@@ -23,8 +23,14 @@ app.use("/api/v1/users", userRoutes);
 // MongoDB connection and server start
 const start = async () => {
     try {
+        // MongoDB URI directly added in the code with your password
+        const dbURI = "mongodb+srv://ersurjeet:surjeetkumar@zoom.kxiqqdp.mongodb.net/Zoom?retryWrites=true&w=majority";
+
         // Connect to MongoDB
-        const connectionDb = await mongoose.connect("mongodb://127.0.0.1:27017/Zoom");
+        const connectionDb = await mongoose.connect(dbURI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
         console.log(`MONGO Connected DB Host: ${connectionDb.connection.host}`);
         
         // Start the server

@@ -37,24 +37,30 @@ const login = async (req, res) => {
 const register = async (req, res) => {
     const { name, username, password } = req.body;
 
+    console.log("📥 Register Request Body:", req.body); // ✅ LOG
+
     try {
         const existingUser = await User.findOne({ username });
         if (existingUser) {
+            console.log("⚠️ User already exists:", existingUser); // ✅ LOG
             return res.status(httpStatus.FOUND).json({ message: "User already exists" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
+        console.log("🔐 Hashed Password:", hashedPassword); // ✅ LOG
 
         const newUser = new User({
-            name: name,
-            username: username,
-            password: hashedPassword
+            name,
+            username,
+            password: hashedPassword,
         });
 
-        await newUser.save();
+        const savedUser = await newUser.save();
+        console.log("✅ New User Saved:", savedUser); // ✅ LOG
 
         res.status(httpStatus.CREATED).json({ message: "User Registered" });
     } catch (e) {
+        console.error("❌ Error in register:", e); // ✅ LOG
         res.status(500).json({ message: `Something went wrong: ${e.message}` });
     }
 };
